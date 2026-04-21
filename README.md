@@ -24,3 +24,13 @@ Community **Events + RSVPs** backend API for **COMP-3018** using **Node.js + Typ
 - dotenv + Helmet + CORS  
 
 ## Project structure (layered architecture)
+src/
+  server.ts
+  routes/
+  controllers/
+  services/
+  repositories/
+  validators/
+  models/
+  middleware/
+  config/
