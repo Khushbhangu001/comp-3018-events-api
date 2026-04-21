@@ -6,14 +6,20 @@ function sendNotFound(res: Response): void {
   res.status(404).json({ message: "Venue not found" });
 }
 
+function readIdParam(req: Request): string | null {
+  const raw = req.params.id;
+  if (typeof raw === "string" && raw.trim().length > 0) return raw;
+  return null;
+}
+
 export function listVenues(_req: Request, res: Response): void {
   res.json(venueService.listVenues());
 }
 
 export function getVenueById(req: Request, res: Response): void {
-  const { id } = req.params;
+  const id = readIdParam(req);
   if (!id) {
-    res.status(400).json({ message: "Missing id" });
+    res.status(400).json({ message: "Invalid id" });
     return;
   }
 
@@ -41,9 +47,9 @@ export function createVenue(req: Request, res: Response): void {
 }
 
 export function updateVenue(req: Request, res: Response): void {
-  const { id } = req.params;
+  const id = readIdParam(req);
   if (!id) {
-    res.status(400).json({ message: "Missing id" });
+    res.status(400).json({ message: "Invalid id" });
     return;
   }
 
@@ -67,9 +73,9 @@ export function updateVenue(req: Request, res: Response): void {
 }
 
 export function deleteVenue(req: Request, res: Response): void {
-  const { id } = req.params;
+  const id = readIdParam(req);
   if (!id) {
-    res.status(400).json({ message: "Missing id" });
+    res.status(400).json({ message: "Invalid id" });
     return;
   }
 

@@ -29,7 +29,7 @@ export function createVenue(input: CreateVenueInput): Venue {
     building: input.building,
     room: input.room,
     capacity: input.capacity,
-    notes: input.notes,
+    ...(input.notes !== undefined ? { notes: input.notes } : {}),
     createdAt: ts,
     updatedAt: ts,
   };
@@ -52,7 +52,11 @@ export function updateVenue(id: string, input: UpdateVenueInput): Venue | null {
   };
 
   if (Object.prototype.hasOwnProperty.call(input, "notes")) {
-    next.notes = input.notes;
+    if (input.notes === undefined) {
+      delete next.notes;
+    } else {
+      next.notes = input.notes;
+    }
   }
 
   venuesById.set(id, next);
