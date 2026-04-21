@@ -1,3 +1,4 @@
+import venueRouter from "./routes/venue.routes";
 import express from "express";
 import cors from "cors";
 import helmet from "helmet";
@@ -10,6 +11,7 @@ const app = express();
 app.use(helmet());
 app.use(cors());
 app.use(express.json());
+app.use("/api/venues", venueRouter);
 
 app.get("/health", (_req, res) => {
   res.json({ ok: true });
