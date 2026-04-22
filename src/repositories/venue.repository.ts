@@ -1,4 +1,5 @@
 import type { CreateVenueInput, UpdateVenueInput, Venue } from "../models/venue";
+import { randomUUID } from "node:crypto";
 
 const venuesById = new Map<string, Venue>();
 
@@ -7,8 +8,7 @@ function nowIso(): string {
 }
 
 function genId(): string {
-  // Node 20+ (you’re on node 24)
-  return globalThis.crypto.randomUUID();
+  return randomUUID();
 }
 
 export function listVenues(): Venue[] {
@@ -29,7 +29,7 @@ export function createVenue(input: CreateVenueInput): Venue {
     building: input.building,
     room: input.room,
     capacity: input.capacity,
-    notes: input.notes,
+    ...(input.notes !== undefined ? { notes: input.notes } : {}),
     createdAt: ts,
     updatedAt: ts,
   };
@@ -52,7 +52,11 @@ export function updateVenue(id: string, input: UpdateVenueInput): Venue | null {
   };
 
   if (Object.prototype.hasOwnProperty.call(input, "notes")) {
-    next.notes = input.notes;
+    if (input.notes === undefined) {
+      delete next.notes;
+    } else {
+      next.notes = input.notes;
+    }
   }
 
   venuesById.set(id, next);
@@ -61,4 +65,8 @@ export function updateVenue(id: string, input: UpdateVenueInput): Venue | null {
 
 export function deleteVenue(id: string): boolean {
   return venuesById.delete(id);
+}
+
+export function __resetForTests(): void {
+  venuesById.clear();
 }
